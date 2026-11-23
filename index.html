@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LearnBridge</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@600;700&family=Noto+Sans+Myanmar:wght@400;600&family=Noto+Sans+Thai:wght@400;600&family=Noto+Sans+Arabic:wght@400;600&display=swap">
+<style>
+/* Layout: one scrolling website per screen inside a fake browser frame. A screen changes only when a button is clicked. */
+:root{
+  --bg:#F5F7F6; --surface:#FFFFFF; --surface2:#EAF2F0; --fg:#16212C; --muted:#56636F; --line:#D8E1E5;
+  --navy:#14284A; --hero:#14284A; --onhero:#FFFFFF; --heromuted:#BFD3E6;
+  --teal:#1F9E8A; --teal-d:#17776A; --amber:#F0A830; --amber-d:#8A5A00; --red:#B3402F; --good-bg:#DDF3EE; --warn-bg:#FFF1D6;
+  --font-display:'Source Serif 4',Cambria,Georgia,serif; --font-body:'Inter','Noto Sans Thai','Noto Sans Myanmar',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1827; --surface:#15243A; --surface2:#1A2D47; --fg:#EAF0F6; --muted:#A8B5C3; --line:#28415F;
+  --hero:#0A1322; --good-bg:#12372F; --warn-bg:#3B2E10; --amber-d:#F0A830; --red:#F08A78; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1827; --surface:#15243A; --surface2:#1A2D47; --fg:#EAF0F6; --muted:#A8B5C3; --line:#28415F;
+  --hero:#0A1322; --good-bg:#12372F; --warn-bg:#3B2E10; --amber-d:#F0A830; --red:#F08A78; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.5;
+  padding-left:max(0px,env(safe-area-inset-left,0px));padding-right:max(0px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:50;background:var(--surface)}
+button{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(2rem,5.2vw,3.4rem);font-weight:700}
+h2{font-size:clamp(1.5rem,3.2vw,2.1rem);font-weight:700}
+h3{font-size:1.2rem;font-weight:600}
+p{margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.ic{flex:none;vertical-align:middle}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:8px}
+
+/* fake browser */
+.chrome{display:flex;align-items:center;gap:12px;background:var(--surface2);border-bottom:1px solid var(--line);padding:8px max(16px,env(safe-area-inset-left,0px))}
+.dots{display:flex;gap:6px}.dots i{width:11px;height:11px;border-radius:50%;background:var(--line);display:block}
+.url{flex:1;min-width:0;display:flex;gap:6px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:.8rem;color:var(--muted);overflow:hidden;white-space:nowrap}
+.tag{font-size:.7rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+@media(max-width:560px){.dots,.tag{display:none}}
+
+/* site header */
+.site{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--surface);border-bottom:1px solid var(--line)}
+.site .wrap{display:flex;align-items:center;gap:16px;height:60px}
+.logo{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:700;font-size:1.25rem;color:var(--fg);background:none;border:0;padding:0}
+.logo svg{color:var(--teal)}
+.nav{margin-left:auto;display:flex;gap:6px;align-items:center}
+.link{background:none;border:0;padding:8px 10px;border-radius:8px;color:var(--muted);font-weight:500}
+.link:hover{color:var(--fg);background:var(--surface2)}
+@media(max-width:620px){.link.hide-s{display:none}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;border:2px solid transparent;border-radius:12px;padding:12px 20px;font-weight:600;min-height:46px;transition:transform .12s,background .12s}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--teal-d);color:#fff}.btn.primary:hover{background:#136357}
+.btn.amber{background:var(--amber);color:#14284A}.btn.amber:hover{background:#e29a1e}
+.btn.ghost{background:transparent;border-color:var(--line);color:var(--fg)}.btn.ghost:hover{background:var(--surface2)}
+.btn.onhero{background:transparent;border-color:rgba(255,255,255,.45);color:#fff}.btn.onhero:hover{background:rgba(255,255,255,.1)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.sm{padding:8px 14px;min-height:38px;font-size:.9rem;border-radius:10px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* hero */
+.hero{background:var(--hero);color:var(--onhero);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;right:-120px;top:-160px;width:460px;height:460px;border-radius:50%;background:var(--teal);opacity:.18}
+.hero::after{content:"";position:absolute;left:-90px;bottom:-140px;width:300px;height:300px;border-radius:50%;background:var(--amber);opacity:.12}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center;padding-block:64px}
+.hero .eyebrow{color:var(--amber);font-weight:700;letter-spacing:.14em;font-size:.78rem;text-transform:uppercase;margin-bottom:14px}
+.hero p.lead{color:var(--heromuted);font-size:1.15rem;max-width:34em;margin:18px 0 28px}
+@media(max-width:820px){.hero .wrap{grid-template-columns:1fr;padding-block:44px}}
+
+section.block{padding-block:56px}
+section.alt{background:var(--surface);border-block:1px solid var(--line)}
+.kicker{color:var(--teal-d);font-weight:700;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .kicker{color:var(--teal)}}
+:root[data-theme="dark"] .kicker{color:var(--teal)}
+.sub{color:var(--muted);max-width:40em;margin-top:10px}
+.grid{display:grid;gap:16px;margin-top:28px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;min-width:0}
+.card .icb{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px;background:var(--good-bg);color:var(--teal-d)}
+.card .icb.a{background:var(--warn-bg);color:var(--amber-d)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .card .icb{color:var(--teal)}}
+:root[data-theme="dark"] .card .icb{color:var(--teal)}
+.card p{color:var(--muted);margin-top:6px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-top:28px;counter-reset:s}
+.step{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:18px;position:relative}
+.step b{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--teal-d);color:#fff;margin-bottom:12px;font-family:var(--font-display)}
+.step:nth-child(even) b{background:var(--amber);color:#14284A}
+.step p{color:var(--muted);font-size:.92rem;margin-top:4px}
+.statband{background:var(--hero);color:#fff;padding-block:52px}
+.statband .wrap{display:flex;flex-wrap:wrap;gap:28px 48px;align-items:center}
+.big{font-family:var(--font-display);font-size:clamp(3rem,9vw,5rem);font-weight:700;color:#3CC4AE;line-height:1}
+.statband p{color:var(--heromuted);max-width:30em}
+.statband small{display:block;margin-top:8px;color:var(--heromuted);opacity:.8}
+
+/* passport */
+.pp{background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(10,20,40,.12);color:var(--fg)}
+.pp-top{background:var(--navy);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700}
+.pp-top small{margin-left:auto;font-family:var(--font-body);font-weight:500;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--heromuted)}
+.pp-body{padding:18px;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:start}
+.avatar{width:64px;height:64px;border-radius:50%;background:var(--amber);display:grid;place-items:center;color:#14284A;font-family:var(--font-display);font-size:1.6rem;font-weight:700}
+.pp dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:.9rem}
+.pp dt{color:var(--muted)}.pp dd{margin:0;font-weight:600;min-width:0}
+.qr{background:#fff;padding:6px;border-radius:8px;border:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 18px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--good-bg);color:var(--teal-d);padding:5px 10px;border-radius:999px;font-weight:600;font-size:.85rem}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip{color:#5FD3BF}}
+:root[data-theme="dark"] .chip{color:#5FD3BF}
+@media(max-width:460px){.pp-body{grid-template-columns:auto 1fr}.pp-body .qr{grid-column:1/-1;justify-self:start}}
+
+/* journey tracker */
+.track{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.tstep{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600;color:var(--muted);padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.tstep i{font-style:normal;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--line);color:var(--fg);font-size:.72rem}
+.tstep.on{border-color:var(--teal);color:var(--fg)}.tstep.on i{background:var(--teal-d);color:#fff}
+.tstep.done i{background:var(--amber);color:#14284A}
+.screenhead{padding-block:36px 8px}
+.screenhead p{color:var(--muted);margin-top:8px;max-width:40em}
+.foot-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
+
+/* language picker */
+.langs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+.opt{display:flex;flex-direction:column;gap:2px;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:12px 14px;min-height:64px}
+.opt:hover{border-color:var(--teal)}
+.opt[aria-pressed="true"]{border-color:var(--teal-d);background:var(--good-bg)}
+.opt span{color:var(--muted);font-size:.85rem}
+.opt b{font-size:1rem}
+.field{display:flex;flex-direction:column;gap:6px;max-width:360px}
+.field input{font:inherit;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--surface);color:var(--fg)}
+.field input:focus{border-color:var(--teal);outline:none}
+.preview{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+.pv{border-radius:16px;padding:20px;border:1px solid var(--line);background:var(--surface);min-width:0}
+.pv small{display:block;color:var(--muted);font-weight:600;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.pv strong{font-size:1.7rem;font-weight:600;display:block;line-height:1.3}
+.pv.h{border-color:var(--teal)}.pv.o{border-color:var(--amber)}
+@media(max-width:520px){.preview{grid-template-columns:1fr}}
+.my{font-family:'Noto Sans Myanmar',Inter,sans-serif;line-height:1.9}.th{font-family:'Noto Sans Thai',Inter,sans-serif;line-height:1.6}.opt span.my{line-height:1.9;padding-block:2px}.pv strong.my{line-height:1.8}.ans.my{line-height:1.9}
+
+/* quiz */
+.progress{height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.progress>div{height:100%;background:var(--teal);width:0;transition:width .25s}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:16px}
+.q h3{font-family:var(--font-body);font-weight:600;font-size:1.1rem}
+.q small{color:var(--muted);font-weight:600}
+.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:14px}
+.ans{background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:12px;font-weight:600;min-height:48px}
+.ans:hover{border-color:var(--teal)}
+.ans[aria-pressed="true"]{border-color:var(--teal-d);background:var(--good-bg)}
+.ans.right{border-color:var(--teal-d);background:var(--good-bg)}
+.ans.wrong{border-color:var(--red)}
+
+/* learning */
+.banner{display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-radius:14px;padding:14px 16px;border:1px solid var(--line);background:var(--surface)}
+.banner.ok{background:var(--good-bg);border-color:var(--teal)}
+.banner.warn{background:var(--warn-bg);border-color:var(--amber)}
+.sw{margin-left:auto;display:inline-flex;align-items:center;gap:10px;background:none;border:0;font-weight:600}
+.sw i{width:46px;height:26px;border-radius:99px;background:var(--line);position:relative;display:block;transition:background .15s}
+.sw i::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.sw[aria-checked="true"] i{background:var(--teal-d)}
+.sw[aria-checked="true"] i::after{transform:translateX(20px)}
+.stairs{display:flex;align-items:flex-end;gap:10px;margin-top:20px;height:160px}
+.stairs div{flex:1;border-radius:10px 10px 0 0;padding:10px;font-weight:600;font-size:.85rem;display:flex;flex-direction:column;justify-content:flex-end;position:relative;min-width:0}
+.stairs .s1{height:35%;background:#BFE5DF;color:#14284A}.stairs .s2{height:55%;background:#8FD0C6;color:#14284A}
+.stairs .s3{height:75%;background:#1F9E8A;color:#fff}.stairs .s4{height:100%;background:#17665A;color:#fff}
+.stairs .here{outline:3px solid var(--amber);outline-offset:2px}
+.stairs .here em{position:absolute;top:-30px;left:0;right:0;text-align:center;font-style:normal;background:var(--amber);color:#14284A;border-radius:99px;padding:2px 8px;font-size:.75rem;width:max-content;margin-inline:auto}
+.seg{display:inline-flex;background:var(--surface2);border-radius:12px;padding:4px;gap:4px}
+.seg button{border:0;background:none;padding:8px 14px;border-radius:9px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.mat{display:flex;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.mat:last-child{border-bottom:0}.mat div{min-width:0;flex:1}.mat small{color:var(--muted)}
+.fb{margin-top:12px;font-weight:600}
+.fb.good{color:var(--teal-d)}.fb.bad{color:var(--red)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .fb.good{color:#5FD3BF}}
+:root[data-theme="dark"] .fb.good{color:#5FD3BF}
+
+/* school */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--surface);margin-top:20px}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line);font-size:.95rem}
+th{color:var(--muted);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}
+tr:last-child td{border-bottom:0}
+tr.new td{background:var(--warn-bg)}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;min-width:90px}.bar i{display:block;height:100%;background:var(--teal)}
+.pill{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.8rem;font-weight:600;background:var(--surface2)}
+.pill.g{background:var(--good-bg);color:var(--teal-d)}.pill.a{background:var(--warn-bg);color:var(--amber-d)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .pill.g{color:#5FD3BF}}
+:root[data-theme="dark"] .pill.g{color:#5FD3BF}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:20px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.tile b{display:block;font-family:var(--font-display);font-size:2rem}.tile span{color:var(--muted);font-size:.9rem}
+
+footer.site-foot{background:var(--surface);border-top:1px solid var(--line);padding-block:28px;margin-top:40px;color:var(--muted);font-size:.9rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--navy);color:#fff;padding:12px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:all .25s;z-index:60;max-width:calc(100vw - 32px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+var P={
+check:'<polyline points="20 6 9 17 4 12"/>',
+right:'<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>',
+left:'<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>',
+download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+globe:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+wifioff:'<line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>',
+book:'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+award:'<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>',
+share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>',
+users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+clip:'<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><polyline points="9 14 11 16 15 12"/>',
+play:'<polygon points="5 3 19 12 5 21 5 3"/>',
+file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
+school:'<path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/>',
+lock:'<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+redo:'<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>',
+wifi:'<path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>',
+bridge:'<path d="M2 18h20"/><path d="M4 18c0-5 3.5-8 8-8s8 3 8 8"/><path d="M8 18v-5M12 18v-8M16 18v-5"/>'
+};
+function ic(n,s){s=s||20;return '<svg class="ic" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+P[n]+'</svg>'}
+
+var HOME=[
+ {id:'my',name:'Myanmar',native:'မြန်မာ',w:'ကြိုဆိုပါတယ်',cls:'my'},
+ {id:'en',name:'English',native:'English',w:'Welcome',cls:''},
+ {id:'th',name:'Thai',native:'ไทย',w:'ยินดีต้อนรับ',cls:'th'}];
+var HOST=[
+ {id:'th',name:'Thai',native:'ไทย',w:'ยินดีต้อนรับ',cls:'th'},
+ {id:'en',name:'English',native:'English',w:'Welcome',cls:''},
+ {id:'my',name:'Myanmar',native:'မြန်မာ',w:'ကြိုဆိုပါတယ်',cls:'my'}];
+var QS=[
+ {s:0,q:'7 + 5 = ?',o:['10','11','12','13'],a:2,skill:'Adding numbers'},
+ {s:0,q:'Which word is a colour?',o:['Blue','Table','Run','Happy'],a:0,skill:'Reading words'},
+ {s:0,q:'Which number is the biggest?',o:['49','94','39','90'],a:1,skill:'Comparing numbers'},
+ {s:1,q:'6 × 7 = ?',o:['36','48','49','42'],a:3,skill:'Multiplication'},
+ {s:1,q:'What is half of 50?',o:['20','30','25','50'],a:2,skill:'Fractions'},
+ {s:1,q:'How many hours are in one day?',o:['12','24','48','60'],a:1,skill:'Telling time'},
+ {s:2,q:'What is 25% of 80?',o:['20','15','25','40'],a:0,skill:'Percentages'},
+ {s:2,q:'Solve: x + 9 = 21. What is x?',o:['10','14','12','30'],a:2,skill:'Simple equations'},
+ {s:2,q:'At sea level, water boils at what temperature?',o:['50 °C','90 °C','150 °C','100 °C'],a:3,skill:'Science basics'},
+ {s:3,q:'Solve: 3x − 5 = 16. What is x?',o:['5','7','6','8'],a:1,skill:'Algebra'},
+ {s:3,q:'A circle has radius 3. What is its area? (use π = 3.14)',o:['9.42','28.26','18.84','37.68'],a:1,skill:'Geometry'},
+ {s:3,q:'Which number is a prime number?',o:['21','27','33','29'],a:3,skill:'Prime numbers'}];
+var STAGES=['Foundation','Primary','Lower secondary','Upper secondary'];
+var MATS=[{id:'m1',t:'Counting workbook',d:'PDF, 14 pages',i:'file'},{id:'m2',t:'Picture story: The Market',d:'Bilingual story, 8 pages',i:'book'},{id:'m3',t:'Practice sheets, Primary',d:'Printable, 6 sheets',i:'file'}];
+var SCHOOLS=[{id:'s1',n:'Hope Learning Center'},{id:'s2',n:'Bridge Community School'}];
+var PATH={home:'',lang:'start/languages',test:'start/placement-test',learn:'learn/today',pass:'passport',school:'school/admissions'};
+var ORDER=['lang','test','learn','pass'];
+var LABEL={lang:'Languages',test:'Placement test',learn:'Learn',pass:'Skills passport'};
+
+var S={screen:'home',name:'May',home:'my',host:'th',ans:Array(12).fill(null),level:1,score:4,
+  view:'both',offline:false,dl:0,mats:{},ex:null,lessonDone:false,school:'s1',shared:false,accepted:false};
+
+function byId(arr,id){for(var i=0;i<arr.length;i++)if(arr[i].id===id)return arr[i]}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function nm(){return esc(S.name.trim()||'May')}
+function answered(){return S.ans.filter(function(x){return x!==null}).length}
+function skills(){var out=[];QS.forEach(function(q,i){if(S.ans[i]===q.a)out.push(q.skill)});if(S.lessonDone)out.push('Greetings in '+byId(HOST,S.host).name);return out}
+
+function chrome(){return '<div class="chrome"><span class="dots"><i></i><i></i><i></i></span><div class="url">'+ic('lock',14)+'<span>learnbridge.app/'+PATH[S.screen]+'</span></div><span class="tag">Prototype</span></div>'}
+function header(){
+  var cta=S.screen==='home'?'<button class="btn primary sm" data-act="go" data-to="lang">Get started</button>':'';
+  return '<header class="site"><div class="wrap"><button class="logo" data-act="go" data-to="home" aria-label="LearnBridge home">'+ic('bridge',26)+'LearnBridge</button><nav class="nav">'
+   +(S.screen==='home'?'<button class="link hide-s" data-act="scroll" data-to="how">How it works</button><button class="link hide-s" data-act="go" data-to="school">For schools</button>':'<button class="link" data-act="go" data-to="home">Home</button>')
+   +cta+'</nav></div></header>'}
+function tracker(){
+  var idx=ORDER.indexOf(S.screen),h='<div class="track" aria-label="Progress">';
+  ORDER.forEach(function(k,i){h+='<span class="tstep'+(i===idx?' on':'')+(i<idx?' done':'')+'"><i>'+(i<idx?'✓':(i+1))+'</i>'+LABEL[k]+'</span>'});
+  return h+'</div>'}
+function foot(){return '<footer class="site-foot"><div class="wrap"><span>LearnBridge is a class prototype. The people, schools and data on this site are made up.</span><button class="btn ghost sm" data-act="restart">'+ic('redo',16)+' Restart demo</button></div></footer>'}
+
+function qr(seed){
+  var n=21,x=0,i;for(i=0;i<seed.length;i++)x=(x*31+seed.charCodeAt(i))>>>0;
+  function r(){x=(x*1664525+1013904223)>>>0;return x/4294967296}
+  var cells='',fin=function(a,b){return (a<7&&b<7)||(a>=n-7&&b<7)||(a<7&&b>=n-7)};
+  for(var a=0;a<n;a++)for(var b=0;b<n;b++){
+    var on;
+    if(fin(a,b)){var ax=a<7?a:(a>=n-7?a-(n-7):a),by=b<7?b:(b>=n-7?b-(n-7):b);on=(ax===0||ax===6||by===0||by===6||(ax>=2&&ax<=4&&by>=2&&by<=4))}
+    else on=r()>.52;
+    if(on)cells+='<rect x="'+a+'" y="'+b+'" width="1" height="1"/>'}
+  return '<svg class="qr" width="92" height="92" viewBox="-1 -1 '+(n+2)+' '+(n+2)+'" fill="#14284A" aria-label="Demo QR code" role="img">'+cells+'</svg>'}
+
+function passportCard(mini){
+  var lv=STAGES[S.level],hl=byId(HOME,S.home),ho=byId(HOST,S.host),sk=skills();
+  var shown=mini?['Adding numbers','Reading words']:sk.slice(0,6);var chips=shown.map(function(s){return '<span class="chip">'+ic('check',14)+esc(s)+'</span>'}).join('');if(!mini&&sk.length>6)chips+='<span class="chip">+'+(sk.length-6)+' more skills</span>';
+  if(!chips)chips='<span class="chip">No skills yet</span>';
+  return '<div class="pp"><div class="pp-top">'+ic('award',20)+'Skills passport<small>LearnBridge</small></div><div class="pp-body"><div class="avatar">'+nm().charAt(0).toUpperCase()+'</div>'
+   +'<dl><dt>Name</dt><dd>'+nm()+'</dd><dt>Languages</dt><dd>'+hl.name+' &rarr; '+ho.name+'</dd><dt>Level</dt><dd>'+lv+'</dd><dt>Issued</dt><dd>'+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})+'</dd><dt>ID</dt><dd>LB-2026-0142</dd></dl>'
+   +qr(S.name+S.level)+'</div><div class="chips">'+chips+'</div></div>'}
+
+/* ---------- screens ---------- */
+function home(){
+ return '<section class="hero"><div class="wrap"><div><p class="eyebrow">Free for refugee and migrant children</p><h1>Learn in your language. Keep your progress.</h1>'
+ +'<p class="lead">Bilingual lessons, offline mode and a skills passport that schools accept. Start where you are, not from zero.</p>'
+ +'<div class="row"><button class="btn amber" data-act="go" data-to="lang">Get started '+ic('right',18)+'</button><button class="btn onhero" data-act="go" data-to="school">For schools and NGOs</button></div></div>'
+ +'<div aria-hidden="true">'+passportCard(true)+'</div></div></section>'
+ +'<section class="block"><div class="wrap"><p class="kicker">Get the app</p><h2>Three ways to start</h2><p class="sub">Download once, then keep learning even without a connection.</p>'
+ +'<div class="grid g3"><div class="card"><div class="icb">'+ic('wifi',22)+'</div><h3>Online</h3><p>Open LearnBridge on any phone or computer.</p></div>'
+ +'<div class="card"><div class="icb a">'+ic('school',22)+'</div><h3>At a school</h3><p>Ask a teacher to help you install it on a school device.</p></div>'
+ +'<div class="card"><div class="icb">'+ic('users',22)+'</div><h3>At an NGO center</h3><p>Visit a partner center for help with the first download.</p></div></div></div></section>'
+ +'<section class="block alt"><div class="wrap"><p class="kicker">What you get</p><h2>Everything a child needs to keep going</h2>'
+ +'<div class="grid g4"><div class="card"><div class="icb">'+ic('globe',22)+'</div><h3>Bilingual lessons</h3><p>Learn in your home language and the language of your new school.</p></div>'
+ +'<div class="card"><div class="icb a">'+ic('wifioff',22)+'</div><h3>Offline mode</h3><p>Download lessons once on Wi-Fi. No data needed after that.</p></div>'
+ +'<div class="card"><div class="icb">'+ic('book',22)+'</div><h3>Free materials</h3><p>Workbooks, stories and practice sheets at no cost.</p></div>'
+ +'<div class="card"><div class="icb a">'+ic('award',22)+'</div><h3>Skills passport</h3><p>Proof of what you know, ready to share with any school.</p></div></div></div></section>'
+ +'<section class="block" id="how"><div class="wrap"><p class="kicker">How it works</p><h2>From download to passport in five steps</h2>'
+ +'<div class="steps"><div class="step"><b>1</b><h3>Download</h3><p>Get the free app online, at a school, or at an NGO center.</p></div>'
+ +'<div class="step"><b>2</b><h3>Choose languages</h3><p>Pick your home language and the host-country language.</p></div>'
+ +'<div class="step"><b>3</b><h3>Take the placement test</h3><p>A short test in your own language finds your level.</p></div>'
+ +'<div class="step"><b>4</b><h3>Learn</h3><p>Short bilingual lessons, online or offline.</p></div>'
+ +'<div class="step"><b>5</b><h3>Earn a skills passport</h3><p>Proof of learning that schools accept.</p></div></div>'
+ +'<div class="row" style="margin-top:28px"><button class="btn primary" data-act="go" data-to="lang">Try it now '+ic('right',18)+'</button></div></div></section>'
+ +'<section class="statband"><div class="wrap"><div class="big">5.8M</div><div><p>refugee children were out of school worldwide in 2025, which is 44% of school-aged refugee children.</p><small>Figure from the project research.</small></div></div></section>'
+ +foot()}
+
+function lang(){
+ var hl=byId(HOME,S.home),ho=byId(HOST,S.host);
+ var hb=HOME.map(function(l){return '<button class="opt" data-act="pickHome" data-id="'+l.id+'" aria-pressed="'+(l.id===S.home)+'"><b>'+l.name+'</b><span class="'+l.cls+'">'+l.native+'</span></button>'}).join('');
+ var ob=HOST.map(function(l){return '<button class="opt" data-act="pickHost" data-id="'+l.id+'" aria-pressed="'+(l.id===S.host)+'"><b>'+l.name+'</b><span class="'+l.cls+'">'+l.native+'</span></button>'}).join('');
+ return header()+'<main class="wrap">'+'<div class="screenhead">'+tracker()+'<h1 style="font-size:clamp(1.8rem,4vw,2.6rem)">Choose your languages</h1><p>You will see every lesson in both languages. You can change this later.</p></div>'
+ +'<div class="field"><label for="nameIn"><b>What should we call you?</b></label><input id="nameIn" value="'+esc(S.name)+'" maxlength="24" autocomplete="off"></div>'
+ +'<h3 style="margin-top:32px">My language</h3><div class="langs">'+hb+'</div>'
+ +'<h3 style="margin-top:28px">Language of my new school</h3><div class="langs">'+ob+'</div>'
+ +'<div class="preview"><div class="pv h"><small>In my language</small><strong class="'+hl.cls+'">'+hl.w+'</strong></div><div class="pv o"><small>In my school\'s language</small><strong class="'+ho.cls+'">'+ho.w+'</strong></div></div>'
+ +'<div class="foot-actions"><button class="btn ghost" data-act="go" data-to="home">'+ic('left',18)+' Back</button><button class="btn primary" data-act="go" data-to="test">Continue to placement test '+ic('right',18)+'</button></div></main>'+foot()}
+
+function test(){
+ var n=answered(),pct=n/12*100;
+ var qs=QS.map(function(q,i){
+  var as=q.o.map(function(o,j){return '<button class="ans" data-act="ans" data-q="'+i+'" data-i="'+j+'" aria-pressed="'+(S.ans[i]===j)+'">'+o+'</button>'}).join('');
+  return '<div class="q"><small>Question '+(i+1)+' of 12</small><h3>'+q.q+'</h3><div class="answers">'+as+'<button class="ans" data-act="ans" data-q="'+i+'" data-i="-1" aria-pressed="'+(S.ans[i]===-1)+'" style="color:var(--muted);font-weight:500">Not sure</button></div></div>'}).join('');
+ return header()+'<main class="wrap"><div class="screenhead">'+tracker()+'<h1 style="font-size:clamp(1.8rem,4vw,2.6rem)">Placement test</h1><p>Twelve short questions, easy ones first, to find your starting level. If you are not sure, choose &ldquo;Not sure&rdquo;. In the real app, the questions appear in '+byId(HOME,S.home).name+'.</p></div>'
+ +'<div class="banner" style="margin-bottom:6px"><div style="flex:1;min-width:200px"><b>'+n+' of 12 answered</b><div class="progress" style="margin-top:8px" role="progressbar" aria-valuemin="0" aria-valuemax="12" aria-valuenow="'+n+'"><div style="width:'+pct+'%"></div></div></div><button class="btn ghost sm" data-act="demoFill">Fill demo answers</button></div>'
+ +qs+'<div class="foot-actions"><button class="btn ghost" data-act="go" data-to="lang">'+ic('left',18)+' Back</button><button class="btn primary" data-act="finishTest"'+(n<12?' disabled':'')+'>See my level '+ic('right',18)+'</button></div></main>'+foot()}
+
+function learn(){
+ var ho=byId(HOST,S.host),hl=byId(HOME,S.home),ex=S.ex;
+ var banner=S.offline?(S.dl===2?'<div class="banner ok">'+ic('wifioff',20)+'<span><b>Offline mode is on.</b> 12 lessons and 3 materials are saved on this device.</span>':'<div class="banner warn">'+ic('wifioff',20)+'<span><b>Offline mode is on, but nothing is saved yet.</b> Download lessons on Wi-Fi first.</span>')
+   :'<div class="banner">'+ic('wifi',20)+'<span>You are online. Download lessons to keep learning without a connection.</span>';
+ banner+='<button class="sw" role="switch" aria-checked="'+S.offline+'" data-act="offline"><span>Offline mode</span><i></i></button></div>';
+ var stairs='<div class="stairs">'+STAGES.map(function(s,i){return '<div class="s'+(i+1)+(i===S.level?' here':'')+'">'+(i===S.level?'<em>You are here</em>':'')+s+'</div>'}).join('')+'</div>';
+ var showH=S.view!=='host',showO=S.view!=='home';
+ var phr='<div class="preview" style="margin-top:16px">'+(showH?'<div class="pv h"><small>'+hl.name+'</small><strong class="'+hl.cls+'">'+hl.w+'</strong></div>':'')+(showO?'<div class="pv o"><small>'+ho.name+'</small><strong class="'+ho.cls+'">'+ho.w+'</strong></div>':'')+'</div>';
+ var opts=HOST.map(function(l){return l.id});
+ var exh='<div class="answers">'+opts.map(function(id){var l=byId(HOST,id);var cls='ans'+(ex===id?(id===ho.id?' right':' wrong'):'');return '<button class="'+cls+' '+l.cls+'" data-act="ex" data-id="'+id+'">'+l.w+'</button>'}).join('')+'</div>';
+ var fb=ex===null?'':(ex===ho.id?'<p class="fb good">Correct. Well done, '+nm()+'.</p>':'<p class="fb bad">Not quite. Look at the '+ho.name+' card above and try again.</p>');
+ var dl=S.dl===0?'<button class="btn primary" data-act="download">'+ic('download',18)+' Download lessons (24 MB)</button>'
+   :(S.dl===1?'<div style="flex:1;min-width:220px"><b>Downloading… <span id="dlpct">0%</span></b><div class="progress" style="margin-top:8px"><div id="dlbar"></div></div></div>'
+   :'<span class="chip">'+ic('check',14)+'Saved on this device</span>');
+ var mats=MATS.map(function(m){var on=S.mats[m.id];return '<div class="mat"><div class="icb" style="width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--good-bg);color:var(--teal-d)">'+ic(m.i,20)+'</div><div><b>'+m.t+'</b><br><small>'+m.d+'</small></div><button class="btn sm '+(on?'ghost':'primary')+'" data-act="mat" data-id="'+m.id+'">'+(on?ic('check',16)+' Saved':ic('download',16)+' Save')+'</button></div>'}).join('');
+ return header()+'<main class="wrap"><div class="screenhead">'+tracker()+'<h1 style="font-size:clamp(1.8rem,4vw,2.6rem)">Hello, '+nm()+'</h1><p>Your starting level is <b>'+STAGES[S.level]+'</b>. You got '+S.score+' of 12 on the placement test.</p></div>'
+ +banner
+ +'<section class="block" style="padding-block:32px 8px"><h2>Your learning path</h2><p class="sub">Four stages, from Foundation to Upper secondary.</p><div style="padding-top:34px">'+stairs+'</div></section>'
+ +'<section class="block" style="padding-block:32px 8px"><div class="card" style="padding:24px"><div class="row" style="justify-content:space-between"><div><p class="kicker">Lesson 3 · Greetings</p><h2>Say &ldquo;Welcome&rdquo; in two languages</h2></div>'
+ +'<div class="seg" role="group" aria-label="Language view"><button data-act="view" data-v="home" aria-pressed="'+(S.view==='home')+'">'+hl.name+'</button><button data-act="view" data-v="both" aria-pressed="'+(S.view==='both')+'">Both</button><button data-act="view" data-v="host" aria-pressed="'+(S.view==='host')+'">'+ho.name+'</button></div></div>'
+ +phr+'<div class="row" style="margin-top:14px"><button class="btn ghost sm" data-act="listen">'+ic('play',16)+' Listen</button></div>'
+ +'<h3 style="margin-top:28px;font-family:var(--font-body);font-size:1.05rem">Which word means &ldquo;Welcome&rdquo; in '+ho.name+'?</h3>'+exh+fb+'</div></section>'
+ +'<section class="block" style="padding-block:32px 8px"><h2>Learn without internet</h2><p class="sub">Download once on Wi-Fi, then use the app anywhere.</p><div class="card row" style="margin-top:20px;min-height:84px">'+dl+'</div></section>'
+ +'<section class="block" style="padding-block:32px 8px"><h2>Free materials</h2><div class="card" style="margin-top:20px;padding-block:6px">'+mats+'</div></section>'
+ +'<div class="foot-actions"><button class="btn ghost" data-act="go" data-to="test">'+ic('left',18)+' Back</button><button class="btn primary" data-act="finishLesson"'+(ex===ho.id||S.lessonDone?'':' disabled')+'>Finish lesson and earn skills '+ic('right',18)+'</button></div></main>'+foot()}
+
+function pass(){
+ var sc=SCHOOLS.map(function(s){return '<button class="opt" data-act="school" data-id="'+s.id+'" aria-pressed="'+(S.school===s.id)+'"><b>'+s.n+'</b><span>Admissions office</span></button>'}).join('');
+ var sh=byId(SCHOOLS,S.school).n;
+ var share=S.shared?'<div class="banner ok" style="margin-top:16px">'+ic('check',20)+'<span><b>Passport shared with '+sh+'.</b> They can now see your level and skills.</span></div>':'';
+ return header()+'<main class="wrap"><div class="screenhead">'+tracker()+'<h1 style="font-size:clamp(1.8rem,4vw,2.6rem)">Your skills passport</h1><p>Proof of what you have learned. Schools can scan the code or open the shared link.</p></div>'
+ +'<div style="max-width:560px">'+passportCard(false)+'</div>'
+ +'<section class="block" style="padding-block:36px 0"><h2>Share with a school</h2><p class="sub">Choose a school or NGO center. They only see this passport.</p><div class="langs" style="max-width:640px">'+sc+'</div>'
+ +'<div class="row" style="margin-top:16px"><button class="btn amber" data-act="share">'+ic('share',18)+(S.shared?' Share again':' Share passport')+'</button></div>'+share+'</section>'
+ +'<div class="foot-actions"><button class="btn ghost" data-act="go" data-to="learn">'+ic('left',18)+' Back to learning</button><button class="btn primary" data-act="go" data-to="school">Open the school view '+ic('right',18)+'</button></div></main>'+foot()}
+
+function school(){
+ var rows=[['Naw Eh','14','Myanmar → Thai','Foundation',35,'Accepted'],['Ko Min','12','Myanmar → Thai','Primary',62,'Accepted'],['Zin Mar','16','Myanmar → Thai','Lower secondary',48,'Pending']];
+ var h=rows.map(function(r){return '<tr><td><b>'+r[0]+'</b>, '+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td><div class="bar"><i style="width:'+r[4]+'%"></i></div></td><td><span class="pill '+(r[5]==='Accepted'?'g':'a')+'">'+r[5]+'</span></td></tr>'}).join('');
+ var sname=byId(SCHOOLS,S.school).n;
+ if(S.shared){h='<tr class="new"><td><b>'+nm()+'</b>, 15</td><td>'+byId(HOME,S.home).name+' → '+byId(HOST,S.host).name+'</td><td>'+STAGES[S.level]+'</td><td><div class="bar"><i style="width:20%"></i></div></td><td>'+(S.accepted?'<span class="pill g">Accepted</span>':'<button class="btn amber sm" data-act="accept">Accept passport</button>')+'</td></tr>'+h}
+ var empty=S.shared?'':'<div class="banner warn" style="margin-top:20px">'+ic('award',20)+'<span>No new passports yet. Share '+nm()+'\'s passport to see it appear in this list.</span><button class="btn ghost sm" style="margin-left:auto" data-act="go" data-to="pass">Go to passport</button></div>';
+ return header()+'<main class="wrap"><div class="screenhead"><p class="kicker">For schools and NGOs</p><h1 style="font-size:clamp(1.8rem,4vw,2.6rem)">'+sname+'</h1><p>See each new student\'s level, languages and progress before they join a class.</p></div>'
+ +'<div class="tiles"><div class="tile"><b>'+(S.shared?4:3)+'</b><span>Students registered</span></div><div class="tile"><b>'+(S.shared?(S.accepted?4:3):2)+'</b><span>Passports accepted</span></div><div class="tile"><b>'+(S.shared?'1':'0')+'</b><span>New passport'+(S.shared?'':'s')+' waiting</span></div></div>'
+ +empty+'<div class="tablewrap"><table><thead><tr><th>Student</th><th>Languages</th><th>Level</th><th>Progress</th><th>Passport</th></tr></thead><tbody>'+h+'</tbody></table></div>'
+ +(S.accepted?'<div class="banner ok" style="margin-top:16px">'+ic('check',20)+'<span><b>'+nm()+' can join a '+STAGES[S.level]+' class.</b> Their previous learning is on record.</span></div>':'')
+ +'<div class="foot-actions"><button class="btn ghost" data-act="go" data-to="'+(S.shared?'pass':'home')+'">'+ic('left',18)+' Back</button><button class="btn primary" data-act="restart">'+ic('redo',18)+' Restart the demo</button></div></main>'+foot()}
+
+var SCREENS={home:home,lang:lang,test:test,learn:learn,pass:pass,school:school};
+var app=document.getElementById('app');
+function render(keep){
+  var y=window.scrollY;
+  app.innerHTML=chrome()+SCREENS[S.screen]();
+  var ni=document.getElementById('nameIn');
+  if(ni)ni.addEventListener('input',function(){S.name=ni.value});
+  window.scrollTo(0,keep?y:0);
+}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove('on')},2400)}
+function reset(){S={screen:'home',name:'May',home:'my',host:'th',ans:Array(12).fill(null),level:1,score:4,view:'both',offline:false,dl:0,mats:{},ex:null,lessonDone:false,school:'s1',shared:false,accepted:false}}
+var timer=null;
+function startDownload(){
+  S.dl=1;render(true);var p=0;clearInterval(timer);
+  timer=setInterval(function(){
+    p+=10;var b=document.getElementById('dlbar'),t=document.getElementById('dlpct');
+    if(b)b.style.width=p+'%';if(t)t.textContent=p+'%';
+    if(p>=100){clearInterval(timer);S.dl=2;render(true);toast('Lessons saved on this device')}
+  },160)}
+
+document.addEventListener('click',function(e){
+  var el=e.target.closest('[data-act]');if(!el||el.disabled)return;
+  var a=el.getAttribute('data-act'),d=el.dataset;
+  switch(a){
+   case 'go':clearInterval(timer);if(S.dl===1)S.dl=0;S.screen=d.to;render(false);break;
+   case 'scroll':var t=document.getElementById(d.to);if(t)t.scrollIntoView({behavior:'smooth'});break;
+   case 'restart':clearInterval(timer);reset();render(false);break;
+   case 'pickHome':S.home=d.id;if(S.host===d.id){S.host=(HOST.filter(function(l){return l.id!==d.id})[0]).id}S.ex=null;render(true);break;
+   case 'pickHost':S.host=d.id;if(S.home===d.id){S.home=(HOME.filter(function(l){return l.id!==d.id})[0]).id}S.ex=null;render(true);break;
+   case 'ans':S.ans[+d.q]=+d.i;render(true);break;
+   case 'demoFill':S.ans=[2,0,1,0,0,1,1,1,1,0,0,0];render(true);break;
+   case 'finishTest':
+     var sc=0,per=[0,0,0,0];QS.forEach(function(q,i){if(S.ans[i]===q.a){sc++;per[q.s]++}});var lv=0;for(var g=0;g<4;g++){if(per[g]>=2)lv=g+1;else break}S.score=sc;S.level=Math.min(lv,3);S.screen='learn';render(false);break;
+   case 'view':S.view=d.v;render(true);break;
+   case 'listen':toast('In the real app, a voice reads this aloud.');break;
+   case 'ex':S.ex=d.id;render(true);break;
+   case 'offline':S.offline=!S.offline;render(true);break;
+   case 'download':startDownload();break;
+   case 'mat':S.mats[d.id]=!S.mats[d.id];render(true);toast(S.mats[d.id]?'Saved for offline use':'Removed from this device');break;
+   case 'finishLesson':S.lessonDone=true;S.screen='pass';render(false);toast('New skill added to your passport');break;
+   case 'school':S.school=d.id;S.shared=false;S.accepted=false;render(true);break;
+   case 'share':S.shared=true;S.accepted=false;render(true);toast('Passport shared');break;
+   case 'accept':S.accepted=true;render(true);toast('Passport accepted by the school');break;
+  }
+});
+render(false);
+})();
+</script>
+</body>
+</html>
